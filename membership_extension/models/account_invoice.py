@@ -51,6 +51,7 @@ class AccountInvoice(models.Model):
             origin = self.search([
                 ('type', '=', 'out_invoice'),
                 ('number', '=', refund.origin),
+                ('company_id', '=', refund.company_id.id)
             ])
             lines = origin.mapped('invoice_line_ids.membership_lines')
             if origin and lines:
