@@ -1,1 +1,1 @@
-contract
+contract https://github.com/steingabelgaard/contract.git
