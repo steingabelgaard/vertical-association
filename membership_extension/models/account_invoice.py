@@ -47,14 +47,14 @@ class AccountInvoice(models.Model):
         self.mapped('invoice_line_ids.membership_lines').write({
             'state': 'invoiced',
         })
-        for refund in self.filtered(lambda r: r.type == 'out_refund'):
+        for refund in self.filtered(lambda r: r.type == 'out_refund' and r.origin):
             origin = self.search([
                 ('type', '=', 'out_invoice'),
                 ('number', '=', refund.origin),
                 ('company_id', '=', refund.company_id.id)
             ])
             lines = origin.mapped('invoice_line_ids.membership_lines')
-            if origin and lines:
+            if origin and len(origin) == 1 and lines:
                 if origin.amount_untaxed == refund.amount_untaxed:
                     lines.write({
                         'state': 'canceled',
