@@ -4,6 +4,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from odoo import api, models
+from future.backports.xmlrpc.client import multi
 
 
 class AccountInvoice(models.Model):
@@ -72,3 +73,10 @@ class AccountInvoice(models.Model):
             'state': 'paid',
         })
         return super(AccountInvoice, self).action_invoice_paid()
+
+    @api.multi
+    def action_invoice_re_open(self):
+        self.mapped('invoice_line_ids.membership_lines').write({
+            'state': 'invoiced',
+        })
+        return super(AccountInvoice, self).action_invoice_re_open()
